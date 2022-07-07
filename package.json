@@ -23,6 +23,7 @@
     "services"
   ],
   "dependencies": {
+    "axios": "^0.27.2",
     "kysely": "^0.19.8",
     "migrations": "^1.2.1-beta.0",
     "mysql": "^2.18.1",

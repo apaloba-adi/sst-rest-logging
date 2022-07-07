@@ -1,7 +1,7 @@
-import { Api, StackContext, use } from "@serverless-stack/resources";
+import { Api, StackContext, use, Auth } from "@serverless-stack/resources";
 import { Storage } from "./Storage";
 
-export function MainApi({ stack } : StackContext) {
+export function MainApi({stack}: StackContext) {
   const table = use(Storage).table;
 
   // Create the API
@@ -15,21 +15,34 @@ export function MainApi({ stack } : StackContext) {
       },
     },
     routes: {
-      "POST /": "functions/upload.main",
-      //"GET /files/{}": "functions/get.main",
-      "GET /": "functions/get.main",
+      "POST /files": "functions/upload.main",
+      "GET /files/{id}": "functions/get.main",
+      "GET /files": "functions/get.main",
       //"DELETE /files/{}": "functions/delete.main",
       //"PUT /files/{}": "function/update.main"
     },
-  });
 
-  // Show the API endpoint in the output
+  });
+  /*
+
+  const auth = new Auth(
+    stack, 'Auth', {
+      login: ['username', 'email']
+    }
+  )
+
+  auth.attachPermissionsForAuthUsers([api])
+
   stack.addOutputs({
     ApiEndpoint: api.url,
+    UserPoolId: auth.userPoolId,
+    UserPoolClientId: auth.userPoolClientId,
+    IdentityPoolId: auth.cognitoIdentityPoolId,
   });
+  */
 
-  // Return the API resource
   return {
     api,
+    //auth
   };
 }
