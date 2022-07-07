@@ -1,0 +1,1 @@
+SST test application for sending and receiving log information. Deploy and login to `localhost:3000`. Currently unable to receive response from any GET requests, but hope to resolve this soon.
