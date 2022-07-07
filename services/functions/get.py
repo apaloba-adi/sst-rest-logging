@@ -1,9 +1,10 @@
 import logging
 from os import environ
+import re
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 from decimal import Decimal
-
+import json
 from exceptiongroup import catch
 
 db_resource = boto3.resource('dynamodb')
@@ -20,14 +21,14 @@ def main(event, context):
                 item['file_size'] = int(item['file_size'])
 
             return {
-                'statusCode': 200,
-                'message':'Cowabunga',
-                'items': result['Items']
+                "statusCode": 200,
+                "body": json.dumps(result['Items'])
             }
         except Exception as e:
             return {
                 'statusCode': 500,
-                'error': logging.error(e)
+                'error': logging.error(e),
+                'message': 'Error!'
             }
     else:
         try:
@@ -37,9 +38,11 @@ def main(event, context):
                     KeyConditionExpression=Key('file_id').eq(id)
                 )
             result['Items'][0]['file_size'] = int(result['Items'][0]['file_size'])
+            print(result['Items'][0])
             return {
                 'statusCode': 200,
-                'result' : result['Items'][0]
+                'body' : json.dumps(result['Items'][0]),
+                'Access-Control-Allow-Origin': '*'
             }
         except Exception as e:
             return {

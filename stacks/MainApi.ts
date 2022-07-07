@@ -18,6 +18,7 @@ export function MainApi({stack}: StackContext) {
       "POST /files": "functions/upload.main",
       "GET /files/{id}": "functions/get.main",
       "GET /files": "functions/get.main",
+      'GET /':'functions/lambda.handler'
       //"DELETE /files/{}": "functions/delete.main",
       //"PUT /files/{}": "function/update.main"
     },

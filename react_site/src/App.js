@@ -5,6 +5,8 @@ function App() {
   const [file, setFile] = useState()
   const [user_id, setUserId] = useState()
   const [file_id, setFileID] = useState() 
+  var [raw_list, setRawList] = useState()
+  const [raw_get, setGet] = useState()
 
   function on_change_file(e) {
     setFile(e.target.files[0])
@@ -31,37 +33,24 @@ function App() {
       })
     })
     .then((response) => response.json())
-    .then((data) => alert(data))
+    .then((data) => console.log(data))
     .catch((error) => {console.log('Error:', error)})
   }
 
   function list_button(e) {
-    fetch(process.env.REACT_APP_API_URL + '/files', {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin' : '*'
-      },
-      method: 'GET',
-    })
-    .then((response) => {console.log(response); return response.json()})
-    .then((data) => {try {console.log(data)} catch (error) {console.error('Error', error)}})
-    .catch(error => console.error(error))
+    fetch(process.env.REACT_APP_API_URL + '/files')
+    .then((response) => response.text())
+    .then(setRawList)
+    var temp = JSON.parse(raw_list)
+    setGet(temp)
   }
 
   function get_button(e) {
     e.preventDefault(e)
-    fetch(process.env.REACT_APP_API_URL + '/files/' + file_id, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin' : '*'
-      },
-      method: 'GET',
-    })
-    .then((response) => {console.log(response); return response.json()})
-    .then((data) => {try {console.log(data)} catch (error) {console.error('Error', error)}})
-    .catch(error => console.error(error))
+    fetch(process.env.REACT_APP_API_URL + '/files/' + file_id)
+    .then((response) => response.text())
+    .then(setGet)
+    console.log(JSON.parse(raw_get))
   }
 
   return (
